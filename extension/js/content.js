@@ -1,8 +1,9 @@
 // emptied background.js file
 document.title = "WarezTogether";
 
-function myfunction() {
-	alert("hi!");
-}
+document.addEventListener("DOMContentLoaded", function () {
+	document.getElementById("container").addEventListener("click", function () {
+		alert("You've just clicked the video container!");
+	});
+})
 
-document.getElementById("container").addEventListener("click", myfunction);
