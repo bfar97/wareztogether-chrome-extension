@@ -2,29 +2,27 @@
 	"name": "WarezTogether",
 	"version": "0.0.1",
 	"manifest_version": 2,
-	"description": "Uma extensão que te permite utilizar o wareztuga com quem mais gostas.",  
+	"description": "Uma extensão que te permite utilizar o wareztuga com quem mais gostas.",
 	"content_scripts" : [{
-		"matches" : ["http://www.wareztuga.tv/movie.php*", "http://www.wareztuga.tv/serie.php*"],    
+		"matches" : ["http://www.wareztuga.tv/movie.php*", "http://www.wareztuga.tv/serie.php*"],
 		"js" : ["js/vendor/jquery.min.js", "js/content.js"],
 		"run_at" : "document_end"
 	}],
 	"background" : {
 		"page": "background.html",
 		"persistent": false
-		},
+	},
 	"page_action": {
-			"default_icon": "img/icon-19.png",
-			"default_title": "WarezTogether"
-			},  
+		"default_icon": "img/icon-19.png",
+		"default_title": "WarezTogether"
+	},  
 	"permissions" : [
-			"tabs",
-			"unlimitedStorage",
-			"background",
-			"http://www.wareztuga.tv/"      
-			],
+		"tabs",
+		"http://www.wareztuga.tv/"
+	],
 	"icons" : {
-				"48" : "img/icon-48.png",
-				"128" : "img/icon-128.png"
-			},
+		"48" : "img/icon-48.png",
+		"128" : "img/icon-128.png"
+	},
 	"content_security_policy": "script-src 'self'; object-src 'self'"
 }
