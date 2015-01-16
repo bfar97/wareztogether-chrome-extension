@@ -1,4 +1,0 @@
-changelog (for commit message)
-
-changed socket.io file (on the client) to a minified version and placed it in the vendor folder;
-
