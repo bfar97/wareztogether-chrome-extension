@@ -14,6 +14,8 @@
 
 # Documentação
 
-## Notas
+## Como funciona?
 
- A iframe do vídeo usada pelo wareztuga é identificada por ter uma largura de 980px (um dos seus atributos). Se alguma vez isto mudar, o seletor jQuery no script injetado tem de ser ajustado.
+  O wareztuga cria uma iframe com o filme na sua página. O nosso objetivo é aceder a essa página, e comunicar com o objeto do player presente no objeto window dessa página.
+  Isso é feito injetando um script nas páginas dos servidores que fazem host dos filmes, e dando acesso à api de comunicação do chrome a esse script. Assim, o script reage a eventos no player e consegue comunicar com o resto da extensão.
+  Como estas páginas dos hosts são carregadas pela iframe quando o utilizador está no wareztuga, a extensão corre normalmente.

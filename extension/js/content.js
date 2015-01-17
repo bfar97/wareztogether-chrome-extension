@@ -12,60 +12,44 @@ $(document).ready(function () {
 
 	});
 
-	// Listen for messages from background script
-	chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
-
-		if (request.from === 'wareztogether') {
-			// Nothing to do here (for now)
-		}
-	});
-
-	// Check if a video has been loaded so we can get the file url
-
-	var params = getUrlParameters();
-
-	if (params['m'] && params['sv'] && params['url']) {
-
-		// User has loaded a video, inject our script into the page
-		injectScript(params['sv']);
-
-		// Listen for events from the DOM, triggered by our injected script
-		listenForEvents();
-
-		// TODO: use the fileUrl to append a player with the video to the page
-
-	}
+	// Inject our script into the page
+	injectScript();
 
 });
 
 //
-// Internal/Utility functions
+// Listening for messages
 //
 
-/*
- * Get parameters from a url string
- * (This function was copied from stack overflow hehue)
- *
- * Example:
- *
- *  var params = getUrlParameters('http://www.wareztuga.tv/movie.php?m=The_Skeleton_Twins&sv=cloudzilla&url=YK0X1EWVV4HCM5APALYM2N560');
- *
- *  params['m']; ==> 'The_Skeleton_Twins'
- *
- */
-function getUrlParameters () {
+// Listen for messages from background script
+chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
-	var vars = window.location.search.substring(1).split("&"),
-		params = {};
-
-	for (var i = 0; i < vars.length; i++) {
-
-			var pair = vars[i].split("=");
-			params[pair[0]] = pair[1];
+	if (request.from === 'wareztogether') {
+		// Nothing to do here (for now)
 	}
-	
-	return params;
-}
+});
+
+// Listen for messages from our injected script
+
+window.addEventListener('message', function (event) {
+	console.log("console.log('received init event!!!');\n console.log(event);\n console.log(event.from === 'wareztogether');\n console.log(event.source != window);\n console.log(event.source !== window);");
+
+	console.log('received init event!!!');
+	console.log(event);
+	console.log(event.data.from === 'wareztogether');
+	console.log(event.source != window);
+	console.log(event.source !== window);
+});
+
+//
+// Sending messages
+//
+
+/* TODO */
+
+//
+// Internal functions
+//
 
 /*
  * Inject our script into the page
@@ -76,27 +60,11 @@ function getUrlParameters () {
  *    To interact with the players, we have to inject a script, gain access to their objects, and trigger
  *  events when something happens. These events will be catched by this content script and reacted to accordingly.
  *
- * @param server - Players may vary from server to server
  */
-function injectScript (server) {
+function injectScript () {
 
-	if (server === 'dropvideo') {
+	var s = document.createElement('script');
+	s.src = chrome.extension.getURL('js/injected.js');
 
-		var s = document.createElement('script');
-		s.src = chrome.extension.getURL('js/injected.js');
-		console.log('chromeextensiongeturl');
-		console.log(s);
-		console.log(s.src);
-
-		(document.head || document.documentElement).appendChild(s);
-	}
-
-}
-
-/*
- * Listens for events triggered by our injected script
- *
- */
-function listenForEvents () {
-
+	(document.head || document.documentElement).appendChild(s);
 }
