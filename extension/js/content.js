@@ -16,64 +16,26 @@ $(document).ready(function () {
 	chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
 		if (request.from === 'wareztogether') {
-
-			// Nothing to do here
-			// ---------xXXXXXXXXXXXxx--------------
-			// ------xXX^----------^^XXx------------
-			// ----xX^----------------^XX-----------
-			// --xX^--------------------^Xx---------
-			// -X^--XX--------------XX---^XX--------
-			// X^--------------------------XX-------
-			// X--XXXXXXXXXXXXXXXXXXX-------X-------
-			// X----------------------------X-------
-			// X----------------------------X-------
-			// Xx---------------------------X-------
-			// ^Xx-------------------------XX-------
-			// --^Xx--------------------xX^---------
-			// -----^Xx--------------xX^------------
-			// -------^Xxxx------xxxXXXXXXXxx-------
-			// --------XXXXXXXXXXXXXXX---^XXXXXXx---
-			// -----xXXX^^--------^XXXx------X-XXX--
-			// ---xXXXx-----xxxx----XXX----xxXXXX^--
-			// -xXXX00X-----X00X---XXXXXXXXXXXX^----
-			// -^^XX^^^^^^^^^^XXXXXXXXXXX----X------
-			// ----X-xxxxxxxxX^X00-----XX----X------
-			// ----X-X-------X-X-00----XX----X------
-			// ----XxX-------XxX--00000XXXxxxX------
-			// ------------------------XX----------
-			// ------------------------XX---xXXXx---
-			// ------------------------XX-xXX000XX--
-			// ---------------xXXXXXXXXXX-X000X00XXx
-			// -------------xXX^---^^XXX--X000XX000X
-			// -xXXXXXXXx--XXX---xxXXXX---XX00XXXX0X
-			// XXX^--^^XXXXXXXXXXXXX^^-----XX0000XXX
-			// XX^---------XX--------------XX0XX0XXX
-			// XX----------XXX--------------XXXXX-XX
-			// XX-----------XXX--------------X-XX--X
-			// XX------------XX-----------------X---
-			// XX-------------XX--------------------
-			// XX-------------XXX-------------------
-			// XXX-------------XXXxx----------------
-			// -XXX-------------^^XXX---------------
-			// --XXX--------------------------------
-
+			// Nothing to do here (for now)
 		}
 	});
 
 	// Check if a video has been loaded so we can get the file url
-	chrome.tabs.getCurrent(function (tab) {
 
-		var params = getUrlParameters(tab.url);
+	var params = getUrlParameters();
 
-		if (params['m'] && params['sv'] && params['url']) {
+	if (params['m'] && params['sv'] && params['url']) {
 
-			// User has loaded a video, get the file url
-			var fileUrl = getVideoFileUrl(params['sv'], params['url']);
+		// User has loaded a video, inject our script into the page
+		injectScript(params['sv']);
 
-			// TODO: use the fileUrl to append a player with the video to the page
+		// Listen for events from the DOM, triggered by our injected script
+		listenForEvents();
 
-		}
-	});
+		// TODO: use the fileUrl to append a player with the video to the page
+
+	}
+
 });
 
 //
@@ -91,38 +53,50 @@ $(document).ready(function () {
  *  params['m']; ==> 'The_Skeleton_Twins'
  *
  */
-function getUrlParameters (url) {
+function getUrlParameters () {
 
-	var parse = function(params, pairs) {
-		var pair = pairs[0];
-		var parts = pair.split('=');
-		var key = decodeURIComponent(parts[0]);
-		var value = decodeURIComponent(parts.slice(1).join('='));
+	var vars = window.location.search.substring(1).split("&"),
+		params = {};
 
-		// Handle multiple parameters of the same name
-		if (typeof params[key] === "undefined") {
-			params[key] = value;
-		} else {
-			params[key] = [].concat(params[key], value);
-		}
+	for (var i = 0; i < vars.length; i++) {
 
-		return pairs.length == 1 ? params : parse(params, pairs.slice(1))
+			var pair = vars[i].split("=");
+			params[pair[0]] = pair[1];
 	}
-
-	// Get rid of leading "?""
-	return search_string.length == 0 ? {} : parse({}, search_string.substr(1).split('&'));
+	
+	return params;
 }
 
 /*
- * Get video file url based on warez's parameters
+ * Inject our script into the page
  *
- * @param server - The server where the file is hosted
+ * @description
+ *    We need to inject a script into the page because this content script is running in a sandbox and
+ *  cannot access the page's window object, where the player objects are found.
+ *    To interact with the players, we have to inject a script, gain access to their objects, and trigger
+ *  events when something happens. These events will be catched by this content script and reacted to accordingly.
  *
- * @param url - The url string that warez receives as a parameter
+ * @param server - Players may vary from server to server
+ */
+function injectScript (server) {
+
+	if (server === 'dropvideo') {
+
+		var s = document.createElement('script');
+		s.src = chrome.extension.getURL('js/injected.js');
+		console.log('chromeextensiongeturl');
+		console.log(s);
+		console.log(s.src);
+
+		(document.head || document.documentElement).appendChild(s);
+	}
+
+}
+
+/*
+ * Listens for events triggered by our injected script
  *
  */
-function getVideoFileUrl (server, url) {
-
-	// TODO
+function listenForEvents () {
 
 }

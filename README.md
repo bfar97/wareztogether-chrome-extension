@@ -11,3 +11,9 @@
 ## Possuem alguma filiação com os criadores do WarezTuga?
 
   Não, nenhuma. Apenas achamos que esta era uma funcionalidade de que o site precisava e decidimos fazê-la nós próprios.
+
+# Documentação
+
+## Notas
+
+ A iframe do vídeo usada pelo wareztuga é identificada por ter uma largura de 980px (um dos seus atributos). Se alguma vez isto mudar, o seletor jQuery no script injetado tem de ser ajustado.
