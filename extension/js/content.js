@@ -1,4 +1,5 @@
-document.title = "WarezTogether";
+// Global socket.io
+var socket = false;
 
 $(document).ready(function () {
 
@@ -15,6 +16,10 @@ $(document).ready(function () {
 	// Inject our script into the page
 	injectScript();
 
+	// Init socket.io
+	socket = io('localhost:8080');
+
+	toServer('message', {my: 'data'});
 });
 
 //
@@ -32,20 +37,22 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 // Listen for messages from our injected script
 
 window.addEventListener('message', function (event) {
-	console.log("console.log('received init event!!!');\n console.log(event);\n console.log(event.from === 'wareztogether');\n console.log(event.source != window);\n console.log(event.source !== window);");
 
-	console.log('received init event!!!');
-	console.log(event);
-	console.log(event.data.from === 'wareztogether');
-	console.log(event.source != window);
-	console.log(event.source !== window);
+	console.log('received init event!');
 });
 
 //
 // Sending messages
 //
 
-/* TODO */
+function toServer (event, data) {
+
+	console.log('Emitting socket message: ');
+	console.log(event);
+	console.log(data);
+
+	socket.emit(event, data);
+}
 
 //
 // Internal functions

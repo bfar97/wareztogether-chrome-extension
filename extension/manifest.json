@@ -5,7 +5,7 @@
 	"description": "Uma extensão que te permite utilizar o wareztuga com quem mais gostas.",
 	"content_scripts" : [{
 		"matches" : ["http://dropvideo.com/embed/*"],
-		"js" : ["js/vendor/jquery.min.js", "js/content.js"],
+		"js" : ["js/vendor/jquery.min.js", "js/vendor/socket.io.min.js", "js/content.js"],
 		"all_frames": true,
 		"run_at" : "document_end"
 	}],

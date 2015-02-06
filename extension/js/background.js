@@ -3,7 +3,7 @@
 //
 
 
-/*var socket = io('localhost:3000');
+/*var socket = io('localhost:8080');
 console.log('Emitting socket message');
 socket.emit('message', { my: 'data' });*/
 
