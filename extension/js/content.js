@@ -17,7 +17,7 @@ $(document).ready(function () {
 	// Init socket.io
 	socket = io('localhost:8080');
 
-	toServer('message', {my: 'data'});
+	socket.emit('init');
 });
 
 //
@@ -37,20 +37,6 @@ window.addEventListener('message', function (event) {
 
 	console.log('received init event!');
 });
-
-//
-// Sending messages
-//
-
-// Send a message to the server
-function toServer (event, data) {
-
-	console.log('Emitting socket message: ');
-	console.log(event);
-	console.log(data);
-
-	socket.emit(event, data);
-}
 
 //
 // Internal functions
