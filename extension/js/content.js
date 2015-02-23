@@ -4,13 +4,11 @@ var socket = false;
 $(document).ready(function () {
 
 	// Send init message to background.js
-	// Todo: allow the user to specify which group they are connecting to and all that before sending this
 	chrome.runtime.sendMessage({from: 'wareztogether', action: 'init'}, function (response) {
 
-		if (!response) { // Background.js returns false if there was a problem
+		if (!response) {
 			console.log('WarezTogether: ERROR - Failed init message.');	
 		}
-
 	});
 
 	// Inject our script into the page
@@ -35,7 +33,6 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 });
 
 // Listen for messages from our injected script
-
 window.addEventListener('message', function (event) {
 
 	console.log('received init event!');
@@ -45,6 +42,7 @@ window.addEventListener('message', function (event) {
 // Sending messages
 //
 
+// Send a message to the server
 function toServer (event, data) {
 
 	console.log('Emitting socket message: ');
