@@ -4,7 +4,7 @@ var socket = false;
 $(document).ready(function () {
 
 	// Send init message to background.js
-	chrome.runtime.sendMessage({from: 'wareztogether', action: 'init'}, function (response) {
+	chrome.runtime.sendMessage({from: 'wareztogether', action: 'showPageAction'}, function (response) {
 
 		if (!response) {
 			console.log('WarezTogether: ERROR - Failed init message.');	
@@ -27,7 +27,7 @@ $(document).ready(function () {
 // Listen for messages from background script
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
-	if (request.from === 'wareztogether') {
+	if (request.from === 'wareztogether' && request.action === 'createRoom' && request.roomName) {
 		// Nothing to do here (for now)
 	}
 });
