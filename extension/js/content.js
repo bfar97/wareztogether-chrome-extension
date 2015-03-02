@@ -16,8 +16,6 @@ $(document).ready(function () {
 
 	// Init socket.io
 	socket = io('localhost:8080');
-
-	socket.emit('init');
 });
 
 //
@@ -28,7 +26,16 @@ $(document).ready(function () {
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
 	if (request.from === 'wareztogether' && request.action === 'createRoom' && request.roomName) {
-		// Nothing to do here (for now)
+	
+		console.log('emitting createRoom');
+
+		socket.emit('createRoom', {roomName: request.roomName});
+
+		socket.on('hello', function (data) {
+			//alert('hello!');
+		});
+
+		sendResponse(true);
 	}
 });
 

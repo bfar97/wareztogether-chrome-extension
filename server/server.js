@@ -9,12 +9,25 @@ var io = require('socket.io')(server),
 
 io.on('connection', function (socket) {
 	
-	socket.on('init', function (data) {
-		console.log(data);
+	socket.on('createRoom', function (data) {
+
+		var roomName = data.roomName;
+		
+		// Re-test if room name is valid
+		if (/^[a-zA-Z0-9-_ ]*$/.test(roomName) === false) {
+			return false;
+		}
+
+		console.log('Someone is creating ' + roomName);
+
+		socket.join(roomName);
+
+		io.to(roomName).emit('hello');
 	});
 });
 
 server.listen(8080);
+console.log('Server listening on 8080')
 
 //
 // Internal functions

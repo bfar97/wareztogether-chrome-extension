@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 	<head>
+		<meta charset="utf-8"> 
 		<title>WarezTogether</title>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<style>
@@ -14,9 +15,8 @@
 				margin-bottom: 18px;
 			}
 
-			.or {
-				display: block;
-				margin: 14px 0;
+			#id {
+				display: none;
 			}
 		</style>
 		<script src="js/vendor/jquery.min.js"></script>
@@ -38,8 +38,6 @@
 						</span>
 					</div>
 
-					<span class="or">ou</span>
-
 					<h4>Cria uma sala</h4>
 					<div class="input-group">
 						<input type="text" id="create-input" class="form-control" placeholder="Nome da sala...">
@@ -48,7 +46,7 @@
 						</span>
 					</div>
 
-					<span id="error-message" class="text-danger">O nome da sala deve conter apenas letras, números, espaços, "-" e "_".</span>
+					<span id="error-message" class="text-danger"></span>
 				</div>
 			</div>
 		</div>
