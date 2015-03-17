@@ -22,28 +22,59 @@ $(document).ready(function () {
 // Listening for messages
 //
 
-// Listen for messages from background script
+// Messages from background script
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
-	if (request.from === 'wareztogether' && request.action === 'createRoom' && request.roomName) {
-	
-		console.log('emitting createRoom');
+	if (request.from === 'wareztogether' && request.action === 'enterRoom' && request.roomName) {
 
-		socket.emit('createRoom', {roomName: request.roomName});
-
-		socket.on('hello', function (data) {
-			//alert('hello!');
-		});
+		socket.emit('enterRoom', {roomName: request.roomName});
 
 		sendResponse(true);
+
+		listenToServer(socket);
 	}
 });
 
-// Listen for messages from our injected script
+// Messages from our injected script
 window.addEventListener('message', function (event) {
 
-	console.log('received init event!');
+	var data = event.data;
+
+	if (data.from === 'wareztogether') {
+
+		if (data.action === 'start') {
+
+			socket.emit('start');
+
+		} else if (data.action === 'pause') {
+
+			socket.emit('pause');
+
+		} else if (data.action === 'resume') {
+
+			socket.emit('resume');
+		}
+	}
 });
+
+function listenToServer (socket) {
+
+	socket.on('start', function (data) {
+		
+		window.postMessage({from: 'wareztogether-server', action: 'start'}, '*');
+	});
+
+	socket.on('pause', function (data) {
+		
+		window.postMessage({from: 'wareztogether-server', action: 'pause'}, '*');
+	});
+
+	socket.on('resume', function (data) {
+		
+		window.postMessage({from: 'wareztogether-server', action: 'resume'}, '*');
+	});
+
+}
 
 //
 // Internal functions

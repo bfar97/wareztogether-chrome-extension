@@ -39,4 +39,30 @@ player.onBeforeResume(function () {
 // React to events from server
 //
 
+window.addEventListener('message', function (event) {
 
+	var data = event.data;
+
+	if (data.from === 'wareztogether-server') {
+
+		if (data.action === 'start') {
+
+			if (player.isPlaying()) {
+
+				player.seek(0).play();
+
+			} else {
+
+				player.play();
+			}
+
+		} else if (data.action === 'pause') {
+
+			player.pause();
+
+		} else if (data.action === 'resume') {
+
+			player.play();
+		}
+	}
+});

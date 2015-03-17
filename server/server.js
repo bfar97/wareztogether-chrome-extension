@@ -9,7 +9,7 @@ var io = require('socket.io')(server),
 
 io.on('connection', function (socket) {
 	
-	socket.on('createRoom', function (data) {
+	socket.on('enterRoom', function (data) {
 
 		var roomName = data.roomName;
 		
@@ -18,11 +18,21 @@ io.on('connection', function (socket) {
 			return false;
 		}
 
-		console.log('Someone is creating ' + roomName);
-
 		socket.join(roomName);
 
-		io.to(roomName).emit('hello');
+		console.log('Socket joining ' + roomName + '!');
+
+		socket.on('start', function (data) {
+			socket.broadcast.to(roomName).emit('start');
+		});
+
+		socket.on('pause', function (data) {
+			socket.broadcast.to(roomName).emit('pause');
+		});
+
+		socket.on('resume', function (data) {
+			socket.broadcast.to(roomName).emit('resume');
+		});
 	});
 });
 

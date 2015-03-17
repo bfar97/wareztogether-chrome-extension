@@ -6,9 +6,8 @@ $(document).ready(function () {
 		currentTab = tabs[0];
 	});
 
-	$('#create-button').on('click', function (e) {
-
-		var roomName = $('#create-input').val();
+	$('#enter-button').on('click', function (e) {
+		var roomName = $('#enter-input').val();
 
 		if (/^[a-zA-Z0-9-_ ]*$/.test(roomName) === false) {
 
@@ -18,16 +17,18 @@ $(document).ready(function () {
 			$('#error-message').fadeOut(200);
 		}
 
-		chrome.tabs.sendMessage(currentTab.id, {from: 'wareztogether', action: 'createRoom', roomName: roomName}, function (response) {
+		chrome.tabs.sendMessage(currentTab.id, {from: 'wareztogether', action: 'enterRoom', roomName: roomName}, function (response) {
 
 			if (!response) {
-				console.log('WarezTogether: ERROR - Failed to create room.');
+
+				console.log('WarezTogether: ERROR - Failed to enter room.');
+
+			} else {
+
+				$('#success-message').html('Entraste na sala ' + roomName + ' com sucesso!');
+
 			}
 		});
-	});
-
-	$('#enter-button').on('click', function (e) {
-
 	});
 
 });

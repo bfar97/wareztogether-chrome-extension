@@ -14,10 +14,6 @@
 			.title {
 				margin-bottom: 18px;
 			}
-
-			#id {
-				display: none;
-			}
 		</style>
 		<script src="js/vendor/jquery.min.js"></script>
 		<script src="js/vendor/bootstrap.min.js"></script>
@@ -30,7 +26,7 @@
 
 					<h3 class="title">WarezTogether</h3>
 
-					<h4>Junta-te a uma sala existente</h4>
+					<h4>Entra numa sala</h4>
 					<div class="input-group">
 						<input type="text" id="enter-input" class="form-control" placeholder="Nome da sala...">
 						<span class="input-group-btn">
@@ -38,15 +34,8 @@
 						</span>
 					</div>
 
-					<h4>Cria uma sala</h4>
-					<div class="input-group">
-						<input type="text" id="create-input" class="form-control" placeholder="Nome da sala...">
-						<span class="input-group-btn">
-							<button id="create-button" class="btn btn-default" type="button">Criar</button>
-						</span>
-					</div>
-
 					<span id="error-message" class="text-danger"></span>
+					<span id="success-message" class="text-success"></span>
 				</div>
 			</div>
 		</div>
