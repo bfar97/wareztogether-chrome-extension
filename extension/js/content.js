@@ -15,7 +15,7 @@ $(document).ready(function () {
 	injectScript();
 
 	// Init socket.io
-	socket = io('localhost:8080');
+	socket = io('ws://wareztogether-mpgp.rhcloud.com:8000');
 });
 
 //
@@ -35,7 +35,37 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 	}
 });
 
+function listenToServer (socket) {
+
+	socket.on('start', function (data) {
+		
+		window.postMessage({from: 'wareztogether-server', action: 'start'}, '*');
+
+		skipNextStart = true;
+	});
+
+	socket.on('pause', function (data) {
+		
+		window.postMessage({from: 'wareztogether-server', action: 'pause'}, '*');
+
+		skipNextPause = true;
+	});
+
+	socket.on('resume', function (data) {
+		
+		window.postMessage({from: 'wareztogether-server', action: 'resume'}, '*');
+
+		skipNextResume = true;
+	});
+
+}
+
 // Messages from our injected script
+
+var skipNextStart = false;
+	skipNextPause = false;
+	skipNextResume = false;
+
 window.addEventListener('message', function (event) {
 
 	var data = event.data;
@@ -44,37 +74,39 @@ window.addEventListener('message', function (event) {
 
 		if (data.action === 'start') {
 
+			if (skipNextStart) {
+
+				skipNextStart = false;
+
+				return false;
+			}
+
 			socket.emit('start');
 
 		} else if (data.action === 'pause') {
+
+			if (skipNextPause) {
+
+				skipNextPause = false;
+
+				return false;
+			}
 
 			socket.emit('pause');
 
 		} else if (data.action === 'resume') {
 
+			if (skipNextResume) {
+
+				skipNextResume = false;
+
+				return false;
+			}
+
 			socket.emit('resume');
 		}
 	}
 });
-
-function listenToServer (socket) {
-
-	socket.on('start', function (data) {
-		
-		window.postMessage({from: 'wareztogether-server', action: 'start'}, '*');
-	});
-
-	socket.on('pause', function (data) {
-		
-		window.postMessage({from: 'wareztogether-server', action: 'pause'}, '*');
-	});
-
-	socket.on('resume', function (data) {
-		
-		window.postMessage({from: 'wareztogether-server', action: 'resume'}, '*');
-	});
-
-}
 
 //
 // Internal functions

@@ -4,8 +4,9 @@ var server = require('http').createServer(function (req, res) {
 	res.end('Bem vindo ao wareztogether :)');
 });
 
-var io = require('socket.io')(server),
-	rooms = [];
+var server_port = process.env.PORT || 8080,
+	server_ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1",
+	io = require('socket.io')(server);
 
 io.on('connection', function (socket) {
 	
@@ -18,36 +19,32 @@ io.on('connection', function (socket) {
 			return false;
 		}
 
+		console.log('Socket entering ' + roomName);
+
 		socket.join(roomName);
 
-		console.log('Socket joining ' + roomName + '!');
-
 		socket.on('start', function (data) {
+
+			console.log('start event!');
+
 			socket.broadcast.to(roomName).emit('start');
 		});
 
 		socket.on('pause', function (data) {
+
+			console.log('pause event!');
+
 			socket.broadcast.to(roomName).emit('pause');
 		});
 
 		socket.on('resume', function (data) {
+
+			console.log('resume event!');
+
 			socket.broadcast.to(roomName).emit('resume');
 		});
 	});
 });
 
-server.listen(8080);
-console.log('Server listening on 8080')
-
-//
-// Internal functions
-//
-
-/*
- * Get a unique user ID
- */
-var lastId = 0;
-
-function getId () {
-	return lastId++;
-}
+server.listen(server_port, server_ip);
+console.log('Server listening on ' + server_port);
